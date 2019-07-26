@@ -23,13 +23,9 @@ public:
         friend class ptr_container;
 
     public:
-        V* operator->()
+        V* operator*()
         {
             return _it->get();
-        }
-        V& operator*()
-        {
-            return *_it->get();
         }
 
         iterator_& operator++()
@@ -59,13 +55,9 @@ public:
         friend class ptr_container;
 
     public:
-        const V* operator->()
+        const V* operator*()
         {
             return _it->get();
-        }
-        const V& operator*()
-        {
-            return *_it->get();
         }
 
         const_iterator_& operator++()
@@ -83,61 +75,51 @@ public:
         base_const_iterator _it;
     };
 
-    typedef iterator_<typename container::iterator> ref_iterator;
-    typedef const_iterator_<typename container::const_iterator> ref_const_iterator;
+    typedef iterator_<typename container::iterator> ptr_iterator;
+    typedef const_iterator_<typename container::const_iterator> ptr_const_iterator;
 
 public:
-    ref_iterator begin()
+    ptr_iterator begin()
     {
-        return ref_iterator(container::begin());
+        return ptr_iterator(container::begin());
     }
 
-    ref_const_iterator begin() const
+    ptr_const_iterator begin() const
     {
-        return ref_const_iterator(container::cbegin());
+        return ptr_const_iterator(container::cbegin());
     }
 
-    ref_const_iterator cbegin() const noexcept
+    ptr_const_iterator cbegin() const noexcept
     {
-        return ref_const_iterator(container::cbegin());
+        return ptr_const_iterator(container::cbegin());
     }
 
-    ref_iterator end()
+    ptr_iterator end()
     {
-        return ref_iterator(container::end());
+        return ptr_iterator(container::end());
     }
 
-    ref_const_iterator end() const
+    ptr_const_iterator end() const
     {
-        return ref_const_iterator(container::cend());
+        return ptr_const_iterator(container::cend());
     }
 
-    ref_const_iterator cend() const noexcept
+    ptr_const_iterator cend() const noexcept
     {
-        return ref_const_iterator(container::cend());
+        return ptr_const_iterator(container::cend());
     }
 
-    V& operator[](const K& k)
-    {
-        return *(container::at(k).get());
-    }
-
-    V& at(const K& k)
-    {
-        return *(container::at(k).get());
-    }
-
-    const V& at(const K& k) const
-    {
-        return *(container::at(k).get());
-    }
-
-    V* get(const K& k)
+    V* operator[](const K& k)
     {
         return container::at(k).get();
     }
 
-    const V* get(const K& k) const
+    V* at(const K& k)
+    {
+        return container::at(k).get();
+    }
+
+    const V* at(const K& k) const
     {
         return container::at(k).get();
     }
