@@ -124,12 +124,12 @@ public:
         return container::at(k).get();
     }
 
-    std::shared_ptr<V> at_base(const K& k)
+    std::shared_ptr<V>& at_base(const K& k)
     {
         return container::at(k);
     }
 
-    const std::shared_ptr<V> at_base(const K& k) const
+    const std::shared_ptr<V>& at_base(const K& k) const
     {
         return container::at(k);
     }
