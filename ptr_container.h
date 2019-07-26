@@ -5,7 +5,7 @@
 
 
 #define PTR_CONTAINER_KV(CONTAINER, K, V) ptr_container<CONTAINER<K, std::shared_ptr<V>>, K, V>
-#define PTR_CONTAINER(CONTAINER, V) PTR_CONTAINER_KV(CONTAINER<std::shared_ptr<V>>, CONTAINER<std::shared_ptr<V>>::size_type, V)
+#define PTR_CONTAINER(CONTAINER, V) ptr_container<CONTAINER<std::shared_ptr<V>>, CONTAINER<std::shared_ptr<V>>::size_type, V>
 
 template <class container, typename K, typename V>
 class ptr_container : public container
