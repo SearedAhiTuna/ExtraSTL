@@ -133,4 +133,48 @@ public:
     {
         return container::at(k);
     }
+
+#if PTR_CONTAINER_FRONT
+    V* front()
+    {
+        return container::front().get();
+    }
+
+    const V* front() const
+    {
+        return container::front().get();
+    }
+
+    std::shared_ptr<V>& front_base()
+    {
+        return container::front();
+    }
+
+    const std::shared_ptr<V>& front_base() const
+    {
+        return container::front();
+    }
+#endif  // PTR_CONTAINER_FRONT
+
+#if PTR_CONTAINER_BACK
+    V* back()
+    {
+        return container::back().get();
+    }
+
+    const V* back() const
+    {
+        return container::back().get();
+    }
+
+    std::shared_ptr<V>& back_base()
+    {
+        return container::back();
+    }
+
+    const std::shared_ptr<V>& back_base() const
+    {
+        return container::back();
+    }
+#endif  // PTR_CONTAINER_BACK
 };
