@@ -11,10 +11,11 @@ template <class container, typename K, typename V>
 class ptr_container : public container
 {
 public:
-    class iterator
+    template <class base_iterator>
+    class iterator_
     {
     private:
-        iterator(container::iterator& it) :
+        iterator_(const base_iterator& it) :
             _it(it)
         {
         }
@@ -31,25 +32,26 @@ public:
             return *_it->get();
         }
 
-        iterator& operator++()
+        iterator_& operator++()
         {
             ++_it;
             return *this;
         }
 
-        bool operator!=(const iterator& other)
+        bool operator!=(const iterator_& other)
         {
             return _it != other._it;
         }
 
     private:
-        container::iterator& _it;
+        base_iterator _it;
     };
 
-    class const_iterator
+    template <class base_const_iterator>
+    class const_iterator_
     {
     private:
-        const_iterator(container::const_iterator& it) :
+        const_iterator_(const base_const_iterator& it) :
             _it(it)
         {
         }
@@ -66,64 +68,87 @@ public:
             return *_it->get();
         }
 
-        const_iterator& operator++()
+        const_iterator_& operator++()
         {
             ++_it;
             return *this;
         }
 
-        bool operator!=(const const_iterator& other)
+        bool operator!=(const const_iterator_& other)
         {
             return _it != other._it;
         }
 
     private:
-        container::const_iterator& _it;
+        base_const_iterator _it;
     };
 
+    typedef iterator_<typename container::iterator> ref_iterator;
+    typedef const_iterator_<typename container::const_iterator> ref_const_iterator;
+
 public:
-    iterator begin()
+    ref_iterator begin()
     {
-        return iterator(container::begin());
+        return ref_iterator(container::begin());
     }
 
-    const_iterator begin() const
+    ref_const_iterator begin() const
     {
-        return const_iterator(container::cbegin());
+        return ref_const_iterator(container::cbegin());
     }
 
-    const_iterator cbegin() const noexcept
+    ref_const_iterator cbegin() const noexcept
     {
-        return const_iterator(container::cbegin());
+        return ref_const_iterator(container::cbegin());
     }
 
-    iterator end()
+    ref_iterator end()
     {
-        return iterator(container::end());
+        return ref_iterator(container::end());
     }
 
-    const_iterator end() const
+    ref_const_iterator end() const
     {
-        return const_iterator(container::cend());
+        return ref_const_iterator(container::cend());
     }
 
-    const_iterator cend() const noexcept
+    ref_const_iterator cend() const noexcept
     {
-        return const_iterator(container::cend());
+        return ref_const_iterator(container::cend());
     }
 
     V& operator[](const K& k)
     {
-        return *container::at(k)->get();
+        return *(container::at(k).get());
     }
-    
+
     V& at(const K& k)
     {
-        return *container::at(k)->get();
+        return *(container::at(k).get());
     }
 
     const V& at(const K& k) const
     {
-        return *container::at(k)->get();
+        return *(container::at(k).get());
+    }
+
+    V* get(const K& k)
+    {
+        return container::at(k).get();
+    }
+
+    const V* get(const K& k) const
+    {
+        return container::at(k).get();
+    }
+
+    std::shared_ptr<V> at_base(const K& k)
+    {
+        return container::at(k);
+    }
+
+    const std::shared_ptr<V> at_base(const K& k) const
+    {
+        return container::at(k);
     }
 };
