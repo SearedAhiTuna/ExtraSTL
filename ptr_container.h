@@ -3,10 +3,11 @@
 
 #include <memory>
 
-#define PTR_CONTAINER(CONTAINER, T) ptr_container<CONTAINER<std::shared_ptr<T>>, T>
-#define PTR_CONTAINER_KV(CONTAINER, K, V) ptr_container<CONTAINER<K, std::shared_ptr<V>>, V>
 
-template <class container, typename K, typename T>
+#define PTR_CONTAINER_KV(CONTAINER, K, V) ptr_container<CONTAINER<K, std::shared_ptr<V>>, K, V>
+#define PTR_CONTAINER(CONTAINER, V) PTR_CONTAINER_KV(CONTAINER, CONTAINER<std::shared_ptr<V>>::size_type, V)
+
+template <class container, typename K, typename V>
 class ptr_container : public container
 {
 public:
@@ -21,11 +22,11 @@ public:
         friend class ptr_container;
 
     public:
-        T* operator->()
+        V* operator->()
         {
             return _it->get();
         }
-        T& operator*()
+        V& operator*()
         {
             return *_it->get();
         }
@@ -56,11 +57,11 @@ public:
         friend class ptr_container;
 
     public:
-        const T* operator->()
+        const V* operator->()
         {
             return _it->get();
         }
-        const T& operator*()
+        const V& operator*()
         {
             return *_it->get();
         }
@@ -111,17 +112,17 @@ public:
         return const_iterator(container::cend());
     }
 
-    T& operator[](const K& k)
+    V& operator[](const K& k)
     {
         return *container::at(k)->get();
     }
     
-    T& at(const K& k)
+    V& at(const K& k)
     {
         return *container::at(k)->get();
     }
 
-    const T& at(const K& k) const
+    const V& at(const K& k) const
     {
         return *container::at(k)->get();
     }
